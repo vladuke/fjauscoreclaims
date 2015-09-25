@@ -1,0 +1,125 @@
+FORMAT: 1A
+HOST: https://healthcore.fja-us.com
+
+# FJA-US HealthCore Claims API
+
+# Plan Resource
+
+Represents all production plans available via RESTful API interface.
+
+# Plan Benefits Providers Resource [/plans/benefits/providers]
+
+The claims engine determines which service codes are applicable for a claim
+and makes a call with a list of codes per plan and an event occurence date.
+The service locates benefits matching service codes within a plan and returns 
+relevant provider contractual arragements organized by benefit by plan.
+
+
+### Retrieve Benefits for Service Codes in selected Plans [GET]
++ Request (application/json)
+
+        {
+            "planId" : ["plan1", "plan2"],
+            "asOfDate": "MMDDYYYY",
+            "serviceCode": ["servCode1", "servCode2", "servCode3"]
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "planId": "plan1",
+                "productType": "productType",
+                "details" : 
+                [{
+                    "benefitType": "benefit-type",
+                    "contractualArrangement" : 
+                    {
+                        "providerContractCode" : "contract-code-type",
+                        "providerContractingStatus": "status-type",
+                        "order": "1",
+                        "preCertCheck": "true"
+                    }
+                },
+                {
+                    "benefitType": "benefit-type",
+                    "contractualArrangement" : 
+                    {
+                        "providerContractCode" : "contract-code-type",
+                        "providerContractingStatus": "status-type",
+                        "order": "1",
+                        "preCertCheck": "true"
+                    }
+                }
+            ]},
+            {
+                "planId": "plan2",
+                "productType": "productType",
+                "details" : 
+                [{
+                    "benefitType": "benefit-type",
+                    "contractualArrangement" : 
+                    {
+                        "providerContractCode" : "contract-code-type",
+                        "providerContractingStatus": "status-type",
+                        "order": "1",
+                        "preCertCheck": "true"
+                    }
+                }]
+            }
+        ]
+
+# Plan Benefits Resource [/plans/benefits]
+
+The client determines relationship between plans and benefits and requests detailed calculation level information 
+for a given benefit .
+
+Please refer to the separately provided XML and/or JSON schemas and samples for more details on the response content.
+
+
+### Retrieve Benefits  in selected Plans [GET]
++ Request (application/json)
+
+        {
+            "benefitType": "benefit-type",
+            "serviceDateFrom": "MMDDYYYY",
+            "serviceDateTo": "MMDDYYYY",
+            "claimLineNumber": 2,
+            "dateOfBirth": "MMDDYYYY",
+            "planReqData" :
+            [{
+                "planId": "plan1",
+                "adjOverride": ["adjudication-override-type", ""adjudication-override-type"],
+                "admissionType": "admission-type",
+                "irc": "relationship-type",
+                "otherInsurance": "other-insurance-type",
+                "preCertIndicator": "boolean",
+                "referralOption": "referral-option-type",
+                "providerData": 
+                    {
+                        "contractualArrangement": 
+                        {
+                            "providerContractCode" : "contract-code-type",
+                            "providerContractingStatus": "status-type",
+                        },
+                        "providerSpecialtyCode": "specialty-code-type"
+                    },
+                "serviceFacilityData": 
+                    {
+                        "contractualArrangement": 
+                        {
+                            "facilityContractCode" : "contract-code-type",
+                            "facilityContractingStatus": "status-type",
+                        },
+                    }
+            ]}
+        ]
+
++ Response 200 (application/json)
+
+        {
+            "planId" : "plan-id",
+            "benefitType": "benefit-type",
+            // more information in the separate document
+        }
+    
